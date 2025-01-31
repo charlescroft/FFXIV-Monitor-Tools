@@ -43158,7 +43158,22 @@ class DotInfoList {
 }
 ;// CONCATENATED MODULE: ./Buff/dot_tracker.ts
 
+class Localtts {
+  constructor() {
+    this.synth = window.speechSynthesis;
+    this.msg = new SpeechSynthesisUtterance();
+    // 设置默认语音参数
+    this.msg.lang = "zh-CN";  // 使用的语言:中文
+    this.msg.volume = 1.0;    // 声音音量：0-1
+    this.msg.rate = 1.4;      // 语速：0-10
+    this.msg.pitch = 1.0;     // 音高：0-1
+  }
 
+  say(text) {
+    this.msg.text = text; // 更新要朗读的文本
+    this.synth.speak(this.msg); 
+  }
+}
 
 class Dot {
   constructor(name, info, list, options) {
@@ -43188,10 +43203,8 @@ class Dot {
         }
       },
       noticeCallback: () => {
-        (0,overlay_plugin_api/* callOverlayHandler */.tK)({
-          call: 'cactbotSay',
-          text: this.options.DotNoticeTTS
-        });
+        const _localTTS = new Localtts();
+        _localTTS.say(this.options.DotNoticeTTS);
       },
       addCallback: () => {
         const elem = makeAuraDotTimerIcon(key, seconds, opacity, this.options.DotIconWidth, this.options.DotIconHeight, txt, this.options.DotBarHeight, 0, textColor, this.options.DotBorderSize, this.info.borderColor, this.info.borderColor, this.info.icon, this.info);
